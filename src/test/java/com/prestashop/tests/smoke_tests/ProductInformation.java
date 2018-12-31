@@ -1,48 +1,35 @@
 package com.prestashop.tests.smoke_tests;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.prestashop.utilities.TestBase;
+
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
-public class ProductInformation {
+public class ProductInformation extends TestBase {
 
-    String url="http://automationpractice.com/index.php";
-    WebDriver driver;
-    @BeforeMethod
-    public void setUp()
-    {
-        WebDriverManager.chromedriver().setup();
-        driver=new ChromeDriver();
-        driver.get(url);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-    }
     @Test
     public void SameNamePriceTest() throws InterruptedException {
         String name=driver.findElement(By.xpath("(//h5//a[@title='Blouse'])[1]")).getText();
         String price=driver.findElement(By.xpath("(//li[2]//span[@class='price product-price'])[2]")).getText();
         System.out.println(name);
         System.out.println(price);
-        driver.findElement(By.xpath("(//img[@title='Blouse'])[1]")).click();
-        String actualName=driver.findElement(By.xpath("//h1")).getText();
+        driver.findElement(By.xpath("(//img[@alt='Blouse'])[1]")).click();
+
+        WebElement frame=driver.findElement(By.xpath("//iframe[@class='fancybox-iframe']"));
+        driver.switchTo().frame(frame);
+        String actualName=driver.findElement(By.cssSelector("h1[itemprop]")).getText();
+
         String actualPrice=driver.findElement(By.id("our_price_display")).getText();
         Assert.assertEquals(actualName,name);
         Assert.assertEquals(actualPrice,price, "Found price is "+actualPrice);
         /////////////////////////////////////////////////////////////
         String quantity=driver.findElement(By.id("quantity_wanted")).getAttribute("value");
-        Select select=new Select(driver.findElement(By.id("group_1")));
+        select=new Select(driver.findElement(By.id("group_1")));
         String size=select.getFirstSelectedOption().getText();
         List<WebElement> Sizeoptions=new ArrayList<>(select.getOptions());
         System.out.println(Sizeoptions.get(0).getText());
@@ -75,7 +62,6 @@ public class ProductInformation {
         String addedItemPrice=driver.findElement(By.id("layer_cart_product_price")).getText();
         //System.out.println("Price "+addedItemPrice);
         String message=driver.findElement(By.xpath("(//h2)[1]")).getText();
-        //System.out.println("Message "+message);
         String expectedConfirmation="Product successfully added to your shopping cart";
 
 
@@ -87,9 +73,5 @@ public class ProductInformation {
 
 
     }
-    @AfterMethod
-    public void tearDown() throws InterruptedException {
-        Thread.sleep(2000);
-        driver.quit();
-    }
+
 }

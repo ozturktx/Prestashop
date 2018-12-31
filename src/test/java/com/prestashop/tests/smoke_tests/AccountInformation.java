@@ -1,28 +1,10 @@
 package com.prestashop.tests.smoke_tests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.prestashop.utilities.TestBase;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import java.util.concurrent.TimeUnit;
-
-public class AccountInformation {
-
-    String url="http://automationpractice.com/index.php";
-    WebDriver driver;
-    @BeforeMethod
-    public void setUp()
-    {
-        WebDriverManager.chromedriver().setup();
-        driver=new ChromeDriver();
-        driver.get(url);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-    }
+;import org.testng.annotations.Test;
+public class AccountInformation extends TestBase {
     @Test
     public void LoginMyAccount() throws InterruptedException {
         driver.findElement(By.linkText("Sign in")).click();
@@ -59,11 +41,4 @@ public class AccountInformation {
         Assert.assertEquals(message,"firstname is required.");
     }
 
-    @AfterMethod
-    public void tearDown() throws InterruptedException {
-        Thread.sleep(5000);
-        driver.quit();
-
-
-    }
 }
