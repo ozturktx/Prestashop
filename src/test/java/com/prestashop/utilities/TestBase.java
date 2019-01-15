@@ -16,23 +16,22 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class TestBase {
     public WebDriver driver;
-
     protected Actions action;
     String url="http://automationpractice.com/index.php";
     public Select select;
-    public Faker faker;
     public Random rndm;
-    @BeforeClass
+
+   /* @BeforeClass
     public void setUpClass()
     {
         WebDriverManager.chromedriver().setup();
     }
-
+*/
     @BeforeMethod
     public void setUp()
     {
-        faker=new Faker();
-        driver=new ChromeDriver();
+
+        driver=Driver.getDriver();
         driver.get(url);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.manage().window().maximize();
@@ -42,9 +41,10 @@ public abstract class TestBase {
 
     @AfterMethod
     public void tearDown() throws InterruptedException {
+
         Thread.sleep(3000);
-        driver.quit();
-        //softAssert.assertAll();
+        Driver.closeDriver();
+
     }
 
 }

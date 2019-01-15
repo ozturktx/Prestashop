@@ -14,6 +14,7 @@ public class ProductInformation extends TestBase {
 
     @Test
     public void SameNamePriceTest() throws InterruptedException {
+
         String name=driver.findElement(By.xpath("(//h5//a[@title='Blouse'])[1]")).getText();
         String price=driver.findElement(By.xpath("(//li[2]//span[@class='price product-price'])[2]")).getText();
         System.out.println(name);
