@@ -5,6 +5,7 @@ import com.prestashop.pages.ItemPage;
 import com.prestashop.pages.ShoppingCartPage;
 import com.prestashop.pages.signinPage;
 import com.prestashop.utilities.TestBase;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -14,15 +15,13 @@ import org.testng.annotations.Test;
 
 public class ErrorMessageValidation extends TestBase {
 
-    ItemPage items=new ItemPage();
-    HomePage homePage=new HomePage();
-    signinPage signinPage=new signinPage();
-    ShoppingCartPage cartPage=new ShoppingCartPage();
+
     public int val;
     double itemPrice;
     String item;
     public void AddItemToCart(String itemName)
     {
+
         homePage.item(itemName).click();
         //items.item.click();
         driver.switchTo().frame(items.iframe);
@@ -48,7 +47,7 @@ public class ErrorMessageValidation extends TestBase {
         //  System.out.println(homePage.itemOnCart.getAttribute("alt"));
         Assert.assertEquals(item,homePage.itemOnCart.getAttribute("alt"));
     }
-    @Test
+    @Test(priority = 1)
     public void CartLogOutTest() throws InterruptedException {
         //Actions action=new Actions(driver);
         login();
@@ -58,11 +57,12 @@ public class ErrorMessageValidation extends TestBase {
         Thread.sleep(1000);
         items.closeWindow.click();
         verifyCartbyHovering();
+        Thread.sleep(1000);
         homePage.logOut.click();
         Assert.assertTrue(homePage.emptyCart.isDisplayed());
     }
 
-    @Test
+    @Test(priority = 2)
     public void CartIconDeleteTest() throws InterruptedException {
         //Actions action=new Actions(driver);
 
@@ -78,14 +78,15 @@ public class ErrorMessageValidation extends TestBase {
 
     }
 
-    @Test
+
+    @Test(priority = 3)
     public void CartCheckoutDeleteTest() throws InterruptedException {
         //Actions action=new Actions(driver);
 
         item="Blouse";
         AddItemToCart(item);
         int first=val;
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         items.continueShopping.click();
         System.out.println("value for first"+val);
         AddItemToCart("Printed Chiffon Dress");
@@ -103,18 +104,19 @@ public class ErrorMessageValidation extends TestBase {
         Assert.assertEquals(cartPage.emptyCartMessage.getText(),"Your shopping cart is empty.");
 
     }
-    @Test
+    @Test(priority = 4)
     public void CartLoginTest() throws InterruptedException {
         //Actions action=new Actions(driver);
         item="Blouse";
         AddItemToCart(item);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         items.closeWindow.click();
         verifyCartbyHovering();
         login();
        verifyCartbyHovering();
     }
-    @Test
+    @Ignore
+    @Test(priority = 5)
     public void cartDetails() throws InterruptedException {
 
         AddItemToCart("Blouse");

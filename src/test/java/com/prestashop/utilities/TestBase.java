@@ -1,11 +1,16 @@
 package com.prestashop.utilities;
 
 import com.github.javafaker.Faker;
+import com.prestashop.pages.HomePage;
+import com.prestashop.pages.ItemPage;
+import com.prestashop.pages.ShoppingCartPage;
+import com.prestashop.pages.signinPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -20,7 +25,10 @@ public abstract class TestBase {
     String url="http://automationpractice.com/index.php";
     public Select select;
     public Random rndm;
-
+    public ItemPage items;//=new ItemPage();
+   public HomePage homePage;//=new HomePage();
+    public signinPage signinPage;//=new signinPage();
+    public ShoppingCartPage cartPage;//=new ShoppingCartPage();
    /* @BeforeClass
     public void setUpClass()
     {
@@ -30,7 +38,10 @@ public abstract class TestBase {
     @BeforeMethod
     public void setUp()
     {
-
+        items=new ItemPage();
+        homePage=new HomePage();
+        signinPage=new signinPage();
+        cartPage=new ShoppingCartPage();
         driver=Driver.getDriver();
         driver.get(url);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
