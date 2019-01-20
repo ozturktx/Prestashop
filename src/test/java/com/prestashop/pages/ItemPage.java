@@ -19,9 +19,26 @@ public class ItemPage {
     @FindBy(xpath = "(//img[@alt='Blouse'])[1]")
     public WebElement item;
 
+    @FindBy(id = "layer_cart_product_title")
+    public WebElement AddeditemName;
+
+    @FindBy(id = "layer_cart_product_attributes")
+    public WebElement AddedItemSize;
+
+    @FindBy(id = "layer_cart_product_quantity")
+    public WebElement AddedItemCount;
+
+    @FindBy(id = "layer_cart_product_price")
+    public WebElement AddedItemPrice;
+
+    @FindBy(xpath = "(//h2)[1]")
+    public WebElement AddedItemMessage;
+
     @FindBy(xpath = "//iframe[@class='fancybox-iframe']")
     public WebElement iframe;
 
+    @FindBy(css = "h1[itemprop]")
+    public WebElement name;
 
     @FindBy(id="quantity_wanted")
     public WebElement count;

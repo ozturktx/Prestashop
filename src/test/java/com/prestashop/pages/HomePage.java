@@ -1,6 +1,7 @@
 package com.prestashop.pages;
 
 import com.prestashop.utilities.Driver;
+import com.prestashop.utilities.TestBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,7 @@ import javax.xml.xpath.XPath;
 public class HomePage {
 
     public HomePage(){
+
         PageFactory.initElements(Driver.getDriver(),this);
     }
 
@@ -37,6 +39,9 @@ public class HomePage {
 
     @FindBy(xpath = "//span[@class='remove_link']")
     public WebElement removeItem;
+
+    @FindBy(xpath = "(//ul[@id='homefeatured']/li[2]//span)[2]")
+    public WebElement priceforBlouse;
 
 
 

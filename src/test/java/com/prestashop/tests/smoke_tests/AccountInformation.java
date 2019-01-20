@@ -1,44 +1,56 @@
 package com.prestashop.tests.smoke_tests;
 
+import com.prestashop.utilities.ConfigurationReader;
+import com.prestashop.utilities.Driver;
 import com.prestashop.utilities.TestBase;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 ;import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class AccountInformation extends TestBase {
+
+   private String fullname;
+    String accountName;
+    String message;
     @Test
     public void LoginMyAccount() throws InterruptedException {
-        driver.findElement(By.linkText("Sign in")).click();
-        driver.findElement(By.id("email")).sendKeys("oscar6161@gmail.com");
-        driver.findElement(By.id("passwd")).sendKeys("Password61");
-        driver.findElement(By.id("SubmitLogin")).click();
-        String title=driver.getTitle();
-        String userName=driver.findElement(By.xpath("//a[@title='View my customer account']")).getText();
-        System.out.println(userName);
+        homePage.signin.click();
+        signinPage.email.sendKeys(ConfigurationReader.getProperty("username"));
+        signinPage.password.sendKeys(ConfigurationReader.getProperty("password"));
+        signinPage.signInButton.click();
+        String title= Driver.getDriver().getTitle();
+        accountName=myAccountPage.fullname.getText();
+
 
         Assert.assertTrue(title.contains("My account"));
-        Assert.assertEquals(userName,"Oscar Bono");
+        Assert.assertEquals(accountName,"Oscar Bono");
 
-        driver.findElement(By.xpath("//a[.='My personal information']")).click();
+        myAccountPage.personalInformation.click();
         Thread.sleep(3000);
-        String fullname=driver.findElement(By.id("firstname")).getAttribute("value")+" "+driver.findElement(By.id("lastname")).getAttribute("value");
-        Assert.assertEquals(userName,fullname);
-        driver.findElement(By.xpath("//span[.='Save']")).click();
-        String message=driver.findElement(By.xpath("//div[@class='alert alert-danger']//li")).getText();
+        fullname= myAccountPage.firstNameAddress.getAttribute("value")+" "+myAccountPage.lastNameAddress.getAttribute("value");
+        Assert.assertEquals(accountName,fullname);
+        myAccountPage.save.click();
+        message=myAccountPage.alertMessage.getText();
         Assert.assertEquals(message,"The password you entered is incorrect.");
-        driver.findElement(By.xpath("(//a//span//i)[3]")).click();
-
+        myAccountPage.backtoAccount.click();
+        title=Driver.getDriver().getTitle();
         Assert.assertTrue(title.contains("My account"));
-
-        driver.findElement(By.xpath("//a[.='My addresses']")).click();
-        driver.findElement(By.xpath("//a[.='Add a new address']")).click();
+//clicks on my address tab
+        myAccountPage.myAddresses.click();
+       //clicks on add a address
+        myAccountPage.addAddress.click();
 
         Thread.sleep(2000);
-        Assert.assertEquals(userName,fullname);
-        driver.findElement(By.id("firstname")).clear();
+        Assert.assertEquals(accountName,fullname);
+        myAccountPage.firstNameAddress.clear();
+        myAccountPage.submitAddress.click();
 
-        driver.findElement(By.id("submitAddress")).click();
-       message=driver.findElement(By.xpath("//div[@class='alert alert-danger']//li[1]")).getText();
-        Assert.assertEquals(message,"firstname is required.");
+        List<WebElement>errors=driver.findElements(By.xpath("//div[@class='alert alert-danger']//li"));
+        Assert.assertTrue(errors.get(0).getText().contains("firstname is required."));
     }
 
 }

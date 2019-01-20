@@ -4,6 +4,7 @@ import com.prestashop.pages.HomePage;
 import com.prestashop.pages.ItemPage;
 import com.prestashop.pages.ShoppingCartPage;
 import com.prestashop.pages.signinPage;
+import com.prestashop.utilities.ConfigurationReader;
 import com.prestashop.utilities.TestBase;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.openqa.selenium.By;
@@ -17,7 +18,7 @@ public class ErrorMessageValidation extends TestBase {
 
 
     public int val;
-    double itemPrice;
+   public double itemPrice;
     String item;
     public void AddItemToCart(String itemName)
     {
@@ -37,8 +38,9 @@ public class ErrorMessageValidation extends TestBase {
     public void login(){
 
         homePage.signin.click();
-        signinPage.email.sendKeys("oscar6161@gmail.com");
-        signinPage.password.sendKeys("Password61");
+
+        signinPage.email.sendKeys(ConfigurationReader.getProperty("username"));
+        signinPage.password.sendKeys(ConfigurationReader.getProperty("password"));
         signinPage.signInButton.click();
     }
     public void verifyCartbyHovering()
@@ -68,7 +70,7 @@ public class ErrorMessageValidation extends TestBase {
 
         item="Blouse";
         AddItemToCart(item);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         items.continueShopping.click();
         verifyCartbyHovering();
         homePage.removeItem.click();

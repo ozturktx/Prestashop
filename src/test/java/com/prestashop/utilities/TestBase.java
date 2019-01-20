@@ -1,10 +1,8 @@
 package com.prestashop.utilities;
 
 import com.github.javafaker.Faker;
-import com.prestashop.pages.HomePage;
-import com.prestashop.pages.ItemPage;
-import com.prestashop.pages.ShoppingCartPage;
-import com.prestashop.pages.signinPage;
+import com.prestashop.pages.*;
+import com.prestashop.tests.functional_tests.cart.ErrorMessageValidation;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,6 +12,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.asserts.SoftAssert;
 
 
 import java.util.Random;
@@ -24,24 +23,27 @@ public abstract class TestBase {
     protected Actions action;
     String url="http://automationpractice.com/index.php";
     public Select select;
+    public SoftAssert softAssert;
     public Random rndm;
-    public ItemPage items;//=new ItemPage();
-   public HomePage homePage;//=new HomePage();
-    public signinPage signinPage;//=new signinPage();
-    public ShoppingCartPage cartPage;//=new ShoppingCartPage();
-   /* @BeforeClass
-    public void setUpClass()
-    {
-        WebDriverManager.chromedriver().setup();
-    }
-*/
+    public ItemPage items;
+   public HomePage homePage;
+    public signinPage signinPage;
+    public ShoppingCartPage cartPage;
+    public MyAccountPage myAccountPage;
+    public FakeData faker;
+    public RegistrationPage registrationPage;//=new RegistrationPage()
     @BeforeMethod
     public void setUp()
     {
+        faker=new FakeData();
+        registrationPage=new RegistrationPage();
         items=new ItemPage();
         homePage=new HomePage();
         signinPage=new signinPage();
         cartPage=new ShoppingCartPage();
+        myAccountPage=new MyAccountPage();
+//        errorMessageValidation=new ErrorMessageValidation();
+  softAssert=new SoftAssert();
         driver=Driver.getDriver();
         driver.get(url);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);

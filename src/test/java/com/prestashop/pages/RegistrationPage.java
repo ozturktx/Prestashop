@@ -15,6 +15,7 @@ public class RegistrationPage {
 
     @FindBy(id="id_gender1")
     public WebElement title;
+
     @FindBy(id="customer_firstname")
     public WebElement firstName;
 

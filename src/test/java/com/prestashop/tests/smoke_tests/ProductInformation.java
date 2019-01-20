@@ -1,38 +1,50 @@
 package com.prestashop.tests.smoke_tests;
 
+import com.prestashop.tests.functional_tests.cart.ErrorMessageValidation;
 import com.prestashop.utilities.TestBase;
 
+import cucumber.api.java.eo.Do;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductInformation extends TestBase {
 
+    //ErrorMessageValidation errorMessageValidation=new ErrorMessageValidation();
     @Test
     public void SameNamePriceTest() throws InterruptedException {
+        String itemName="Blouse";
+        homePage.item(itemName).click();
+       // System.out.println(homePage.priceforBlouse.getAttribute("innerHTML"));
+        double priceHomePage= Double.parseDouble(homePage.priceforBlouse.getAttribute("innerHTML").trim().substring(1));
+        //items.item.click();
+        driver.switchTo().frame(items.iframe);
+        String actualName=items.name.getText();
+        double actualPrice =Double.parseDouble(items.price.getText().substring(1));
+        items.sizes().selectByIndex(1);
 
-        String name=driver.findElement(By.xpath("(//h5//a[@title='Blouse'])[1]")).getText();
-        String price=driver.findElement(By.xpath("(//li[2]//span[@class='price product-price'])[2]")).getText();
-        System.out.println(name);
-        System.out.println(price);
-        driver.findElement(By.xpath("(//img[@alt='Blouse'])[1]")).click();
 
-        WebElement frame=driver.findElement(By.xpath("//iframe[@class='fancybox-iframe']"));
-        driver.switchTo().frame(frame);
-        String actualName=driver.findElement(By.cssSelector("h1[itemprop]")).getText();
+        //String price=driver.findElement(By.xpath("(//li[2]//span[@class='price product-price'])[2]")).getText();
+        System.out.println(itemName);
+        //System.out.println(itemPrice);
 
-        String actualPrice=driver.findElement(By.id("our_price_display")).getText();
-        Assert.assertEquals(actualName,name);
-        Assert.assertEquals(actualPrice,price, "Found price is "+actualPrice);
+
+       // String actualPrice=driver.findElement(By.id("our_price_display")).getText();
+        Assert.assertEquals(actualName,itemName);
+        Assert.assertEquals(actualPrice,priceHomePage, "Found price is "+actualPrice);
         /////////////////////////////////////////////////////////////
-        String quantity=driver.findElement(By.id("quantity_wanted")).getAttribute("value");
-        select=new Select(driver.findElement(By.id("group_1")));
-        String size=select.getFirstSelectedOption().getText();
-        List<WebElement> Sizeoptions=new ArrayList<>(select.getOptions());
+
+
+        String quantity=items.count.getAttribute("value");
+       // select=new Select(driver.findElement(By.id("group_1")));
+        String size=items.sizes().getOptions().get(0).getText();//getFirstSelectedOption().getText();
+        List<WebElement> Sizeoptions=new ArrayList<>(items.sizes().getOptions());
         System.out.println(Sizeoptions.get(0).getText());
 
         Assert.assertTrue(quantity.equals("1"));
@@ -49,28 +61,28 @@ public class ProductInformation extends TestBase {
                 break;}
         }
         Assert.assertTrue(options,"Size options do not match");
-
-        driver.findElement(By.id("add_to_cart")).click();
+        items.addtoCart.click();
+       // driver.findElement(By.id("add_to_cart")).click();
         Thread.sleep(3000);
-        String addedItemName=driver.findElement(By.id("layer_cart_product_title")).getText();
-        //System.out.println("name "+addedItemName);
-        String addedItemSize=driver.findElement(By.id("layer_cart_product_attributes")).getText();
+        String addedItemName=items.AddeditemName.getText();
+        //System.out.println("itemName "+addedItemName);
+        String addedItemSize=items.AddedItemSize.getText();
         addedItemSize=addedItemSize.substring(addedItemSize.length()-1);
         //System.out.println("Size "+addedItemSize);
 
-        String addedItemQuantity=driver.findElement(By.id("layer_cart_product_quantity")).getText();
+        String addedItemQuantity=items.AddedItemCount.getText();
         // System.out.println("Quantity "+addedItemQuantity);
-        String addedItemPrice=driver.findElement(By.id("layer_cart_product_price")).getText();
+        double addedItemPrice=Double.parseDouble(items.AddedItemPrice.getText().substring(1));
         //System.out.println("Price "+addedItemPrice);
-        String message=driver.findElement(By.xpath("(//h2)[1]")).getText();
+        String message=items.AddedItemMessage.getText();
         String expectedConfirmation="Product successfully added to your shopping cart";
 
 
         Assert.assertEquals(message,expectedConfirmation, "Confirmation title does not match");
         Assert.assertEquals(addedItemQuantity,"1", "Quantity is not one");
-        Assert.assertEquals(addedItemSize,"S", "Default size is not S");
-        Assert.assertEquals(addedItemName,name, "Confirmation page name and homepage name does not match");
-        Assert.assertEquals(addedItemPrice,price, "Confirmation page price and homepage price does not match");
+        softAssert.assertEquals(addedItemSize,"S", "Default size is not S");
+        Assert.assertEquals(addedItemName,itemName, "Confirmation page itemName and homepage itemName does not match");
+        Assert.assertEquals(addedItemPrice,actualPrice, "Confirmation page price and homepage price does not match");
 
 
     }
