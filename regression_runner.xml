@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="prestaShop Regression  Runner Test">
+    <test name="Regression">
+       <packages>
+           <package name="com.prestashop.tests.functional_tests"/>
+       </packages>
+
+    </test>
+</suite>

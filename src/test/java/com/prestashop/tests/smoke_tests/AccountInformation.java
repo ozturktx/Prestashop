@@ -18,39 +18,48 @@ public class AccountInformation extends TestBase {
     String message;
     @Test
     public void LoginMyAccount() throws InterruptedException {
-        homePage.signin.click();
-        signinPage.email.sendKeys(ConfigurationReader.getProperty("username"));
-        signinPage.password.sendKeys(ConfigurationReader.getProperty("password"));
-        signinPage.signInButton.click();
+        extentLogger=report.createTest("Login Test ");
+
+        pages.homePage().signin.click();
+        pages.signinPage().email.sendKeys(ConfigurationReader.getProperty("username"));
+        pages.signinPage().password.sendKeys(ConfigurationReader.getProperty("password"));
+        pages.signinPage().signInButton.click();
         String title= Driver.getDriver().getTitle();
-        accountName=myAccountPage.fullname.getText();
+        accountName=pages.myAccountPage().fullname.getText();
 
-
+extentLogger.info("enter credentials and click log in");
         Assert.assertTrue(title.contains("My account"));
         Assert.assertEquals(accountName,"Oscar Bono");
 
-        myAccountPage.personalInformation.click();
+        pages.myAccountPage().personalInformation.click();
         Thread.sleep(3000);
-        fullname= myAccountPage.firstNameAddress.getAttribute("value")+" "+myAccountPage.lastNameAddress.getAttribute("value");
+        fullname= pages.myAccountPage().firstNameAddress.getAttribute("value")+" "+pages.myAccountPage().lastNameAddress.getAttribute("value");
         Assert.assertEquals(accountName,fullname);
-        myAccountPage.save.click();
-        message=myAccountPage.alertMessage.getText();
+        pages.myAccountPage().save.click();
+        extentLogger.info("Click on personal info and confirm that user name");
+        message=pages.myAccountPage().alertMessage.getText();
         Assert.assertEquals(message,"The password you entered is incorrect.");
-        myAccountPage.backtoAccount.click();
+        extentLogger.info("Click save button and confirm that there is a error");
+
+        pages.myAccountPage().backtoAccount.click();
         title=Driver.getDriver().getTitle();
         Assert.assertTrue(title.contains("My account"));
 //clicks on my address tab
-        myAccountPage.myAddresses.click();
+        extentLogger.info("confirm the address");
+        pages.myAccountPage().myAddresses.click();
        //clicks on add a address
-        myAccountPage.addAddress.click();
-
+        pages.myAccountPage().addAddress.click();
+        extentLogger.info("confirm the address");
         Thread.sleep(2000);
         Assert.assertEquals(accountName,fullname);
-        myAccountPage.firstNameAddress.clear();
-        myAccountPage.submitAddress.click();
 
-        List<WebElement>errors=driver.findElements(By.xpath("//div[@class='alert alert-danger']//li"));
-        Assert.assertTrue(errors.get(0).getText().contains("firstname is required."));
+        pages.myAccountPage().firstNameAddress.clear();
+        pages.myAccountPage().submitAddress.click();
+
+       // List<WebElement>errors=driver.findElements(By.xpath("//div[@class='alert alert-danger']//li"));
+        Assert.assertTrue(pages.registrationPage().errorMessage().get(0).getText().contains("firstname is required."));
+
+        extentLogger.info("Confirm that firstname is required message displayed");
     }
 
 }

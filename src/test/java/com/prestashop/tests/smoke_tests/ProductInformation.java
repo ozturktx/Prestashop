@@ -19,16 +19,19 @@ public class ProductInformation extends TestBase {
     //ErrorMessageValidation errorMessageValidation=new ErrorMessageValidation();
     @Test
     public void SameNamePriceTest() throws InterruptedException {
-        String itemName="Blouse";
-        homePage.item(itemName).click();
-       // System.out.println(homePage.priceforBlouse.getAttribute("innerHTML"));
-        double priceHomePage= Double.parseDouble(homePage.priceforBlouse.getAttribute("innerHTML").trim().substring(1));
-        //items.item.click();
-        driver.switchTo().frame(items.iframe);
-        String actualName=items.name.getText();
-        double actualPrice =Double.parseDouble(items.price.getText().substring(1));
-        items.sizes().selectByIndex(1);
 
+        extentLogger=report.createTest("SameNamePriceTest");
+        String itemName="Blouse";
+        pages.homePage().item(itemName).click();
+       // System.out.println(homePage.priceforBlouse.getAttribute("innerHTML"));
+        double priceHomePage= Double.parseDouble(pages.homePage().priceforBlouse.getAttribute("innerHTML").trim().substring(1));
+        //items.item.click();
+        extentLogger.info("Add an item to cart");
+        driver.switchTo().frame(pages.itemPage().iframe);
+        String actualName=pages.itemPage().name.getText();
+        double actualPrice =Double.parseDouble(pages.itemPage().price.getText().substring(1));
+        pages.itemPage().sizes().selectByIndex(1);
+        extentLogger.info("Confirm that price and name matches with homepage");
 
         //String price=driver.findElement(By.xpath("(//li[2]//span[@class='price product-price'])[2]")).getText();
         System.out.println(itemName);
@@ -40,11 +43,12 @@ public class ProductInformation extends TestBase {
         Assert.assertEquals(actualPrice,priceHomePage, "Found price is "+actualPrice);
         /////////////////////////////////////////////////////////////
 
+        extentLogger.info("Confirm that quantity and size matches");
 
-        String quantity=items.count.getAttribute("value");
+        String quantity=pages.itemPage().count.getAttribute("value");
        // select=new Select(driver.findElement(By.id("group_1")));
-        String size=items.sizes().getOptions().get(0).getText();//getFirstSelectedOption().getText();
-        List<WebElement> Sizeoptions=new ArrayList<>(items.sizes().getOptions());
+        String size=pages.itemPage().sizes().getOptions().get(0).getText();//getFirstSelectedOption().getText();
+        List<WebElement> Sizeoptions=new ArrayList<>(pages.itemPage().sizes().getOptions());
         System.out.println(Sizeoptions.get(0).getText());
 
         Assert.assertTrue(quantity.equals("1"));
@@ -61,20 +65,20 @@ public class ProductInformation extends TestBase {
                 break;}
         }
         Assert.assertTrue(options,"Size options do not match");
-        items.addtoCart.click();
+        pages.itemPage().addtoCart.click();
        // driver.findElement(By.id("add_to_cart")).click();
         Thread.sleep(3000);
-        String addedItemName=items.AddeditemName.getText();
+        String addedItemName=pages.itemPage().AddeditemName.getText();
         //System.out.println("itemName "+addedItemName);
-        String addedItemSize=items.AddedItemSize.getText();
+        String addedItemSize=pages.itemPage().AddedItemSize.getText();
         addedItemSize=addedItemSize.substring(addedItemSize.length()-1);
         //System.out.println("Size "+addedItemSize);
 
-        String addedItemQuantity=items.AddedItemCount.getText();
+        String addedItemQuantity=pages.itemPage().AddedItemCount.getText();
         // System.out.println("Quantity "+addedItemQuantity);
-        double addedItemPrice=Double.parseDouble(items.AddedItemPrice.getText().substring(1));
+        double addedItemPrice=Double.parseDouble(pages.itemPage().AddedItemPrice.getText().substring(1));
         //System.out.println("Price "+addedItemPrice);
-        String message=items.AddedItemMessage.getText();
+        String message=pages.itemPage().AddedItemMessage.getText();
         String expectedConfirmation="Product successfully added to your shopping cart";
 
 
@@ -84,7 +88,7 @@ public class ProductInformation extends TestBase {
         Assert.assertEquals(addedItemName,itemName, "Confirmation page itemName and homepage itemName does not match");
         Assert.assertEquals(addedItemPrice,actualPrice, "Confirmation page price and homepage price does not match");
 
-
+        extentLogger.pass("Passed");
     }
 
 }

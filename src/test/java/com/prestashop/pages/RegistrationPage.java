@@ -1,10 +1,13 @@
 package com.prestashop.pages;
 
 import com.prestashop.utilities.Driver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
 
 public class RegistrationPage {
 
@@ -55,9 +58,13 @@ public class RegistrationPage {
     @FindBy(id="submitAccount")
     public WebElement register;
 
-    @FindBy(xpath="//div[@class='alert alert-danger']//li[1]")
-    public WebElement errorMessage;
+   /* @FindBy(xpath="//div[@class='alert alert-danger']//li[1]")
+    public WebElement errorMessage;*/
 
+public List<WebElement> errorMessage()
+{
+    return Driver.getDriver().findElements(By.xpath("//div[@class='alert alert-danger']//li"));
+}
 
     public Select stateList()
     {
